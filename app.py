@@ -28,7 +28,8 @@ navbar = html.Nav(
             className="navbar-nav px-3",
             children=[
                 html.Li(
-                    html.A('GitHub', className='nav-link', href='https://github.com'),
+                    html.A('GitHub', className='nav-link',
+                    href='https://github.com/danielrmt/dash-arima-simulator'),
                     className='nav-item text-nowrap'
                 )
             ]
