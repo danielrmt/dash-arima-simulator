@@ -72,7 +72,7 @@ html.Div(
     className="container-fluid row",
     children=[
         html.Div(
-            className="col-md-3 d-none d-md-block bg-light sidebar",
+            className="col-md-3 bg-light sidebar",
             children=sidebar
         ),
         html.Div(
