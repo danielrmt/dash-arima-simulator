@@ -93,6 +93,16 @@ def update_ma_sliders(p):
 
 
 # ----
+def acf_plot_data(acf, mode='markers'):
+    return {
+        'y': acf,
+        'mode': 'markers',
+        'error_y': {
+            'symmetric': False,
+            'array':      np.where(acf < 0, -acf, 0),
+            'arrayminus': np.where(acf > 0,  acf, 0)}
+        }
+
 @app.callback(
     [Output('generated_plot', 'figure'),
      Output('generated_acf', 'figure'),
@@ -114,13 +124,16 @@ def generate_data(nsample, d, ar_params, ma_params, regen ):
     y = sm.tsa.arma_generate_sample(ar, ma, nsample, burnin=1)
     for i in range(d):
         y = np.cumsum(y)
+    acf  = sm.tsa.stattools.acf(y)
+    pacf = sm.tsa.stattools.pacf(y)
+    #
     plot = {'data': [{'y': y}],
             'layout': {'title': 'Série gerada'}}
-    acf  = {'data': [{'y': sm.tsa.stattools.acf(y), 'mode':'markers'}],
-            'layout': {'title': 'Função de autocorrelação'}}
-    pacf = {'data': [{'y': sm.tsa.stattools.pacf(y), 'mode':'markers'}],
-            'layout': {'title': 'Função de autocorrelação parcial'}}
-    return plot, acf, pacf
+    acf_plot  = {'data': [acf_plot_data(acf)],
+                 'layout': {'title': 'Função de autocorrelação'}}
+    pacf_plot = {'data': [acf_plot_data(pacf)],
+                 'layout': {'title': 'Função de autocorrelação parcial'}}
+    return plot, acf_plot, pacf_plot
 
 
 # ----
