@@ -75,6 +75,24 @@ sidebar.append(
 
 
 # ----
+def gen_grid(items, gridClass='', colClass='', rowClass=''):
+    rows = []
+    for row in items:
+        cols = []
+        size = int(12 / len(row))
+        for col in row:
+            cols.append(html.Div(col, className=f"col-md-{size} {colClass}"))
+        rows.append(html.Div(cols, className=f"row {rowClass}"))
+    return html.Div(rows, className=f"{gridClass}")
+
+grid = gen_grid([
+    [dcc.Graph(id='generated_plot')],
+    [dcc.Graph(id='generated_acf'),
+     dcc.Graph(id='generated_pacf')]
+], "col-md-9")
+
+
+# ----
 app.layout = html.Div([navbar, 
 html.Div(
     className="container-fluid row",
@@ -83,33 +101,7 @@ html.Div(
             className="col-md-3 bg-light sidebar",
             children=sidebar
         ),
-        html.Div(
-            className="col-md-9",
-            children=[
-                html.Div(
-                    className='row',
-                    children=[
-                        html.Div(
-                            className="col-md-12",
-                            children=[dcc.Graph(id='generated_plot')]
-                        )
-                    ]
-                ),
-                html.Div(
-                    className='row',
-                    children=[
-                        html.Div(
-                            className="col-md-6",
-                            children=[dcc.Graph(id='generated_acf')]
-                        ),
-                        html.Div(
-                            className="col-md-6",
-                            children=[dcc.Graph(id='generated_pacf')]
-                        )
-                    ]
-                )
-            ]
-        )
+        grid
     ]
 )])
 
