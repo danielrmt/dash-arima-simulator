@@ -8,6 +8,7 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, ALL
+from layout_utils import *
 
 
 # ----
@@ -18,31 +19,6 @@ app = dash.Dash(
 app.title = "Simulador ARIMA"
 
 server = app.server
-
-
-# ----
-def gen_navbar(brand, items,
-    barClass='navbar-dark bg-dark p-0',
-    brandClass='col-sm-3 col-md-2 mr-0',
-    listClass='px-3',
-    itemLiClass='text-nowrap',
-    itemAClass=''):
-    item_list = []
-    for key in items:
-        item_list.append(
-            html.Li(
-                html.A(key, href=items[key],
-                    className=f"nav-link {itemAClass}"),
-                className=f"nav-item {itemLiClass}"
-            )
-        )
-    return html.Nav(
-        [
-            html.A(brand, className=f"navbar-brand {brandClass}"),
-            html.Ul(item_list, className=f"navbar-nav {listClass}")
-        ], className=f"navbar {barClass}"
-    )
-navbar = gen_navbar('Simulador Arima', {'Github': 'https://github.com/danielrmt/dash-arima-simulator'})
 
 
 
@@ -67,28 +43,8 @@ sidebar.append(html.Div(id='ar_container'))
 sidebar.append(html.Div(id='ma_container'))
 sidebar.append(html.Button('Gerar novamente', id='regen'))
 
-
-# ----
-def gen_sidebar_layout(sidebar, content, sidebar_size=2,
-    sidebarClass='bg-light', contentClass='', mainClass=''):
-    return html.Div(
-        [html.Div(sidebar, className=f"sidebar col-md-{sidebar_size} {sidebarClass}"),
-         html.Div(content, className=f"col-md-{12-sidebar_size} {contentClass}")],
-        className=f"row {mainClass}"
-    )
-
-
-
-# ----
-def gen_grid(items, gridClass='', colClass='', rowClass=''):
-    rows = []
-    for row in items:
-        cols = []
-        size = int(12 / len(row))
-        for col in row:
-            cols.append(html.Div(col, className=f"col-md-{size} {colClass}"))
-        rows.append(html.Div(cols, className=f"row {rowClass}"))
-    return html.Div(rows, className=f"{gridClass}")
+navbar = gen_navbar(app.title,
+  {'Github': 'https://github.com/danielrmt/dash-arima-simulator'})
 
 grid = gen_grid([
     [dcc.Graph(id='generated_plot')],
@@ -96,15 +52,12 @@ grid = gen_grid([
      dcc.Graph(id='generated_pacf')]
 ], "col-md-9")
 
-
-# ----
 app.layout = html.Div([navbar, gen_sidebar_layout(sidebar, grid, 3)])
 
 
 
 # ----
 def update_sliders(p, s):
-
     param_marks = {
         -1: {'label': '-1.0'},
         -0.5: {'label': '-0.5'},
@@ -137,8 +90,6 @@ def update_ar_sliders(p):
     [Input('q', 'value')])
 def update_ma_sliders(p):
     return update_sliders(p, 'MA')
-
-
 
 
 # ----
