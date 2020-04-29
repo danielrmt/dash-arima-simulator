@@ -22,7 +22,7 @@ server = app.server
 
 # ----
 def gen_navbar(brand, items,
-    barClass='navbar-dark bg-dark flex-md-nowrap p-0 shadow',
+    barClass='navbar-dark bg-dark p-0',
     brandClass='col-sm-3 col-md-2 mr-0',
     listClass='px-3',
     itemLiClass='text-nowrap',
@@ -75,6 +75,17 @@ sidebar.append(
 
 
 # ----
+def gen_sidebar_layout(sidebar, content, sidebar_size=2,
+    sidebarClass='bg-light', contentClass='', mainClass=''):
+    return html.Div(
+        [html.Div(sidebar, className=f"sidebar col-md-{sidebar_size} {sidebarClass}"),
+         html.Div(content, className=f"col-md-{12-sidebar_size} {contentClass}")],
+        className=f"row {mainClass}"
+    )
+
+
+
+# ----
 def gen_grid(items, gridClass='', colClass='', rowClass=''):
     rows = []
     for row in items:
@@ -93,17 +104,7 @@ grid = gen_grid([
 
 
 # ----
-app.layout = html.Div([navbar, 
-html.Div(
-    className="container-fluid row",
-    children=[
-        html.Div(
-            className="col-md-3 bg-light sidebar",
-            children=sidebar
-        ),
-        grid
-    ]
-)])
+app.layout = html.Div([navbar, gen_sidebar_layout(sidebar, grid, 3)])
 
 # ----
 @app.callback(
