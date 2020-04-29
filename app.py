@@ -21,22 +21,29 @@ server = app.server
 
 
 # ----
-navbar = html.Nav(
-    className="navbar navbar-dark bg-dark flex-md-nowrap p-0 shadow",
-    children=[
-        html.A('Simulador ARIMA', className="navbar-brand col-sm-3 col-md-2 mr-0"),
-        html.Ul(
-            className="navbar-nav px-3",
-            children=[
-                html.Li(
-                    html.A('GitHub', className='nav-link',
-                    href='https://github.com/danielrmt/dash-arima-simulator'),
-                    className='nav-item text-nowrap'
-                )
-            ]
+def gen_navbar(brand, items,
+    barClass='navbar-dark bg-dark flex-md-nowrap p-0 shadow',
+    brandClass='col-sm-3 col-md-2 mr-0',
+    listClass='px-3',
+    itemLiClass='text-nowrap',
+    itemAClass=''):
+    item_list = []
+    for key in items:
+        item_list.append(
+            html.Li(
+                html.A(key, href=items[key],
+                    className=f"nav-link {itemAClass}"),
+                className=f"nav-item {itemLiClass}"
+            )
         )
-    ]
-)
+    return html.Nav(
+        [
+            html.A(brand, className=f"navbar-brand {brandClass}"),
+            html.Ul(item_list, className=f"navbar-nav {listClass}")
+        ], className=f"navbar {barClass}"
+    )
+navbar = gen_navbar('Simulador Arima', {'Github': 'https://github.com/danielrmt/dash-arima-simulator'})
+
 
 
 # ----
