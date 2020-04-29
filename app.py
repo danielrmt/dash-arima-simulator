@@ -50,7 +50,7 @@ grid = gen_grid([
     [dcc.Graph(id='generated_plot')],
     [dcc.Graph(id='generated_acf'),
      dcc.Graph(id='generated_pacf')]
-], "col-md-9")
+])
 
 app.layout = html.Div([navbar, gen_sidebar_layout(sidebar, grid, 3)])
 
