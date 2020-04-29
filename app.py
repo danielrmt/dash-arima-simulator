@@ -41,7 +41,7 @@ for param in ['p','d','q']:
     )
 sidebar.append(html.Div(id='ar_container'))
 sidebar.append(html.Div(id='ma_container'))
-sidebar.append(html.Button('Gerar novamente', id='regen'))
+sidebar.append(html.Button('Gerar novamente', id='regen', className='btn btn-primary'))
 
 navbar = gen_navbar(app.title,
   {'Github': 'https://github.com/danielrmt/dash-arima-simulator'})

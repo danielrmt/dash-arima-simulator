@@ -5,7 +5,7 @@ import dash_html_components as html
 
 
 def gen_navbar(brand, items,
-    barClass='navbar-dark bg-dark p-0',
+    barClass='navbar-dark bg-dark p-1',
     brandClass='col-sm-3 col-md-2 mr-0',
     listClass='px-3',
     itemLiClass='text-nowrap',
@@ -29,7 +29,7 @@ def gen_navbar(brand, items,
 
 
 def gen_sidebar_layout(sidebar, content, sidebar_size=2,
-    sidebarClass='bg-light', contentClass='', mainClass=''):
+    sidebarClass='bg-light p-5', contentClass='', mainClass=''):
     return html.Div(
         [html.Div(sidebar, className=f"sidebar col-md-{sidebar_size} {sidebarClass}"),
          html.Div(content, className=f"col-md-{12-sidebar_size} {contentClass}")],
