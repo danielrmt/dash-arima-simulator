@@ -11,6 +11,10 @@ from dash.dependencies import Input, Output, ALL
 from layout_utils import *
 
 
+#
+plotly_margin = dict(l=30, r=20, t=40, b=20)
+
+
 # ----
 app = dash.Dash(
     __name__,
@@ -128,11 +132,14 @@ def generate_data(nsample, d, ar_params, ma_params, regen ):
     pacf = sm.tsa.stattools.pacf(y)
     #
     plot = {'data': [{'y': y}],
-            'layout': {'title': 'Série gerada'}}
+            'layout': {'title': 'Série gerada',
+                       'margin': plotly_margin}}
     acf_plot  = {'data': [acf_plot_data(acf)],
-                 'layout': {'title': 'Função de autocorrelação'}}
+                 'layout': {'title': 'Função de autocorrelação',
+                            'margin': plotly_margin}}
     pacf_plot = {'data': [acf_plot_data(pacf)],
-                 'layout': {'title': 'Função de autocorrelação parcial'}}
+                 'layout': {'title': 'Função de autocorrelação parcial',
+                            'margin': plotly_margin}}
     return plot, acf_plot, pacf_plot
 
 
