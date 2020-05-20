@@ -13,6 +13,7 @@ from layout_utils import *
 
 #
 plotly_margin = dict(l=30, r=20, t=40, b=20)
+slider_tooptip = { 'always_visible': True, 'placement': 'right' }
 
 
 # ----
@@ -31,7 +32,7 @@ sidebar = [
     html.H6('Parâmetros', className='sidebar-heading text-muted'),
     html.Label('Tamanho da série', htmlFor='nsample'),
     dcc.Slider(id='nsample', min=30, max=1000, step=10, value=100,
-        marks={i*200:f'{i*200}' for i in range(10)})
+        marks={i*200:f'{i*200}' for i in range(10)}, tooltip=slider_tooptip)
 ]
 hyperparam_marks = {i: f'{i}' for i in range(6)}
 for param in ['p','d','q']:
@@ -40,7 +41,7 @@ for param in ['p','d','q']:
         html.Div([
             html.Label(param),
             dcc.Slider(id=param, min=0, max=5, step=1, value=value,
-                marks=hyperparam_marks)
+                marks=hyperparam_marks, tooltip=slider_tooptip)
         ])
     )
 sidebar.append(html.Div(id='ar_container'))
@@ -76,7 +77,8 @@ def update_sliders(p, s):
             html.Div([
                 html.Label(f"{s}({i+1})", htmlFor=f"{s}{i+1}"),
                 dcc.Slider(id={'type':f'{s}-param-slider', 'index': i}, 
-                    min=-1, max=1, step=0.1, value=value, marks=param_marks)
+                    min=-1, max=1, step=0.1, value=value,
+                    marks=param_marks, tooltip=slider_tooptip)
             ])
         )
     return output
