@@ -8,11 +8,25 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, ALL
+
+import plotly.graph_objects as go
+import plotly.express as px
+import plotly.io as pio
+
 from layout_utils import *
 
 
 #
-plotly_margin = dict(l=30, r=20, t=40, b=20)
+pio.templates["custom"] = go.layout.Template(
+    layout=go.Layout(
+        margin=dict(l=50, r=20, t=40, b=20),
+        legend=dict(orientation='h'),
+        colorway=["#E69F00", "#56B4E9", "#009E73", "#F0E442", 
+                  "#0072B2", "#D55E00", "#CC79A7", "#999999"]
+    )
+)
+pio.templates.default = 'plotly_white+custom'
+
 slider_tooptip = { 'always_visible': True, 'placement': 'right' }
 
 
@@ -99,15 +113,12 @@ def update_ma_sliders(p):
 
 
 # ----
-def acf_plot_data(acf, mode='markers'):
-    return {
-        'y': acf,
-        'mode': 'markers',
-        'error_y': {
-            'symmetric': False,
-            'array':      np.where(acf < 0, -acf, 0),
-            'arrayminus': np.where(acf > 0,  acf, 0)}
-        }
+def acf_plot_data(acf, title=''):
+    return px.scatter(x=np.arange(len(acf)), y=acf, title=title,
+        labels={'x':'Lag', 'y':''},
+        error_y=np.where(acf < 0, -acf, 0),
+        error_y_minus=np.where(acf > 0,  acf, 0))
+
 
 @app.callback(
     [Output('generated_plot', 'figure'),
@@ -133,15 +144,10 @@ def generate_data(nsample, d, ar_params, ma_params, regen ):
     acf  = sm.tsa.stattools.acf(y)
     pacf = sm.tsa.stattools.pacf(y)
     #
-    plot = {'data': [{'y': y}],
-            'layout': {'title': 'Série gerada',
-                       'margin': plotly_margin}}
-    acf_plot  = {'data': [acf_plot_data(acf)],
-                 'layout': {'title': 'Função de autocorrelação',
-                            'margin': plotly_margin}}
-    pacf_plot = {'data': [acf_plot_data(pacf)],
-                 'layout': {'title': 'Função de autocorrelação parcial',
-                            'margin': plotly_margin}}
+    plot = px.line(x=np.arange(len(y)), y=y, title='Série gerada',
+        labels={'x':'', 'y':''})
+    acf_plot  = acf_plot_data(acf, 'Função de autocorrelação')
+    pacf_plot = acf_plot_data(pacf, 'Função de autocorrelação parcial')
     return plot, acf_plot, pacf_plot
 
 
